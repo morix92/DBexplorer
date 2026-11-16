@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DB Explorer</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Mermaid.js per il diagramma ER visivo -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🗄️ DB Explorer</h1>
+      <p>
+        Ispeziona la struttura di database relazionali, genera report,
+        diagrammi ER e lancia le tue query con permessi di lettura.
+      </p>
+    </header>
+
+    <section class="card config-card">
+      <h2>Configurazione Connessione</h2>
+
+      <form id="inspectForm">
+        <div class="form-group">
+          <label for="dialect">Seleziona Database</label>
+          <select id="dialect" name="dialect">
+            <option value="sqlite">SQLite (File locale o "demo")</option>
+            <option value="postgres">PostgreSQL</option>
+            <option value="mysql">MySQL / MariaDB</option>
+            <option value="mssql">SQL Server</option>
+          </select>
+        </div>
+
+        <!-- Campi specifici per SQLite -->
+        <div class="form-group connection-fields" id="fields-sqlite">
+          <label for="dbPath">Inserisci percorso File o "demo"</label>
+          <input type="text" id="dbPath" name="dbPath" value="demo" placeholder="es. demo o ./database.sqlite">
+        </div>
+
+        <!-- Campi comuni per DB di rete -->
+        <div id="fields-network" class="hidden">
+          <div class="form-row">
+            <div class="form-group form-group-host">
+              <label for="host">Host</label>
+              <input type="text" id="host" name="host" value="localhost" placeholder="localhost">
+            </div>
+
+            <div class="form-group form-group-port">
+              <label for="port">Porta</label>
+              <input type="number" id="port" name="port" placeholder="5432">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="database">Nome Database</label>
+              <input type="text" id="database" name="database" placeholder="es. my_shop">
+            </div>
+
+            <div class="form-group">
+              <label for="user">Utente</label>
+              <input type="text" id="user" name="user" placeholder="postgres / root">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="••••••••">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Avvia Ispezione</button>
+      </form>
+    </section>
+
+    <section id="resultsSection" class="hidden">
+
+      <!-- BLOCCO INTERATTIVO -->
+      <div id="interactiveSection" class="card interactive-section">
+
+        <!-- SELETTORE DEI TAB -->
+        <div class="tab-header">
+          <button type="button" class="tab-btn active" data-tab="sql-tab">
+            Console SQL
+          </button>
+          <button type="button" class="tab-btn" data-tab="ai-tab">
+            Assistente AI
+          </button>
+        </div>
+      
+        <!-- TAB 1: CONSOLE SQL MANUALE -->
+        <div id="sql-tab" class="tab-content">
+          <h3 class="sql-tab-title">
+            Console SQL (Sola Lettura)
+          </h3>
+
+          <p class="tab-description">
+            Scrivi direttamente una query <code>SELECT</code>
+            ed eseguila all'istante sul database.
+          </p>
+
+          <form id="sqlForm" class="sqlForm">
+            <div class="sql-input-wrapper">
+              <textarea id="sqlInput" placeholder="Es. SELECT * FROM users LIMIT 10;" rows="3" autocomplete="off"></textarea>
+            </div>
+
+            <div class="sql-form-actions">
+
+              <button type="submit" class="btn sql-submit-btn">
+                Esegui Query
+              </button>
+            </div>
+          </form>
+
+          <div id="sqlResultsContainer" class="sql-results-container"></div>
+        </div>
+
+        <!-- TAB 2: ASSISTENTE AI -->
+        <div id="ai-tab" class="tab-content hidden">
+          <h3 class="ai-tab-title">
+            Assistente AI (Gemini)
+          </h3>
+
+          <p class="tab-description">
+            Fai una domanda sulla struttura di questo database,
+            chiedi consigli sulle relazioni o query SQL di esempio.
+          </p>
+
+          <div class="privacy-consent-box">
+            <label for="dataConsentCheckbox" class="privacy-consent-label">
+              <input type="checkbox" id="dataConsentCheckbox">
+              <span>
+                Attenzione: Vuoi consentire all'IA di interrogare i dati reali del database (Modalità Sola Lettura)
+              </span>
+            </label>
+          </div>
+
+          <div id="chatMessages" class="chat-messages">
+            <div class="chat-msg ai-msg">
+              Ciao! Ho analizzato la struttura del database.
+              Chiedimi pure qualsiasi cosa su tabelle, relazioni
+              o query da eseguire.
+            </div>
+          </div>
+
+          <form id="chatForm" class="chat-form">
+            <textarea id="chatInput" placeholder="Scrivi una domanda... (Usa Ctrl + Invio per inviare, Invio per andare a capo)" rows="2" autocomplete="off"></textarea>
+            <button type="submit" class="btn chat-btn">
+              Invia
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Report del Database -->
+      <div id="reportOutput" class="report-output"></div>
+
+    </section>
+  </div>
+
+  <!-- Modale di Conferma Privacy / Sicurezza -->
+  <div id="consentModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h3 class="modal-title">
+        ⚠️ Conferma di Sicurezza e Privacy
+      </h3>
+
+      <p class="modal-description">
+        Stai per autorizzare l'assistente IA ad accedere in
+        <strong>sola lettura</strong> ai dati contenuti nelle tabelle
+        di questo database per risponderti con dati reali.
+      </p>
+
+      <p class="modal-disclaimer">
+        I dati strutturali e i campioni di righe elaborati verranno
+        condivisi con le API di Google Gemini. Verranno comunque
+        bloccate rigorosamente tutte le istruzioni di scrittura o
+        modifica (come UPDATE, INSERT, DELETE, DROP).
+      </p>
+
+      <div class="modal-actions">
+        <button id="modalCancelBtn" class="btn modal-cancel-btn">
+          Annulla
+        </button>
+
+        <button id="modalConfirmBtn" class="btn modal-confirm-btn">
+          Conferma e Attiva
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
