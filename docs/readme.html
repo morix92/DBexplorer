@@ -22,10 +22,42 @@ body{
     background:#fff;
 }
 
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:40px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+}
+
+header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  padding: 3rem 2.5rem;
+  position: relative;
+}
+	
+.hero-top {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+header p.subtitle {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  max-width: 720px;
+  margin-top: 0.5rem;
+}
+
+.logoDBexplorer {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .hero{
@@ -47,6 +79,8 @@ body{
 
 .section{
     margin-top:30px;
+	padding-left: 30px;
+	padding-right: 30px;
 }
 
 .section h2{
@@ -98,15 +132,44 @@ code{
     color:#64748b;
 }
 
-.badge{
-    display:inline-block;
-    padding:6px 12px;
-    background:#dbeafe;
-    color:#1d4ed8;
-    border-radius:999px;
-    margin:5px;
-    font-size:.9rem;
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }
+
+.badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+nav {
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+nav a:hover {
+  color: var(--primary);
+}
+
 .attachments {
 	width: 100%;
 	height: auto;
@@ -118,29 +181,49 @@ code{
 	width: 50%;
 	object-fit: cover;
 }
+
 </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="hero-top">
 
-    <section class="hero">
-        <h1>🗄️ DB Explorer</h1>
+        <img src="./logo.png" alt="Logo progetto" class="logoDBexplorer">
 
-        <p>
+        <div>
+          <h1>DB Schema Explorer</h1>
+          <p class="subtitle">
             Strumento per analizzare rapidamente la struttura di database relazionali,
             generare diagrammi ER automatici, esplorare schemi e relazioni tra tabelle
             e interagire tramite Intelligenza Artificiale o query SQL diretto.
-        </p>
-
-        <div style="margin-top:30px">
-            <span class="badge">SQLite</span>
-            <span class="badge">PostgreSQL</span>
-            <span class="badge">MySQL</span>
-            <span class="badge">SQL Server</span>
+          </p>
         </div>
-    </section>
+      </div>
+
+      <div class="badges">
+        <span class="badge">SQLite</span>
+        <span class="badge">PostgreSQL</span>
+        <span class="badge">MySQL</span>
+        <span class="badge">SQL Server</span>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+      
+      <a href="#funzionalita">Funzionalità</a>
+	  <a href="#assistenteAI">Assistente AI</a>
+	  <a href="#consoleSQL">Console SQL</a>
+	  <a href="#sicurezza">Sicurezza</a>
+      <a href="#diagrammiER">Leggere i Diagrammi ER</a>
+	  <a href="#stack">Stack Tecnologico</a>
+      <a href="#installazione">Installazione e Avvio</a>
+      
+    </nav>
+	
 
     <section class="section">
         <h2>Panoramica</h2>
@@ -165,7 +248,7 @@ code{
 		</div>
     </section>
 
-    <section class="section">
+    <section class="section" id="funzionalita">
         <h2>Funzionalità Principali</h2>
 
         <div class="card-grid">
@@ -215,7 +298,7 @@ code{
         </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="assistenteAI">
 		<h2>Assistente AI</h2>
 
 		<p>
@@ -272,8 +355,8 @@ code{
 		</div>
 	</section>
 
-    <section class="section">
-        <h2>💻 Console SQL Integrata</h2>
+    <section class="section" id="consoleSQL">
+        <h2>Console SQL Integrata</h2>
 
         <p>
             La console SQL permette di eseguire query (di sola lettura) direttamente sul backend,
@@ -288,8 +371,8 @@ code{
 
     </section>
 
-    <section class="section">
-        <h2>🔒 Sicurezza</h2>
+    <section class="section" id="sicurezza">
+        <h2>Sicurezza</h2>
 
         <p>
             L'applicazione è progettata per operare esclusivamente in modalità read-only.
@@ -306,8 +389,8 @@ code{
         </ul>
     </section>
 
-    <section class="section">
-        <h2>📊 Interpretazione dei Diagrammi ER</h2>
+    <section class="section" id="diagrammiER">
+        <h2>Interpretazione dei Diagrammi ER</h2>
 
         <p>
             I diagrammi ER utilizzano la notazione Crow's Foot per descrivere
@@ -328,8 +411,8 @@ code{
         </div>
     </section>
 
-    <section class="section">
-        <h2>🛠️ Stack Tecnologico</h2>
+    <section class="section" id="stack">
+        <h2>Stack Tecnologico</h2>
 
         <div class="card-grid">
 
@@ -357,8 +440,8 @@ code{
 
     </section>
 
-    <section class="section">
-        <h2>⚙️ Installazione</h2>
+    <section class="section" id="installazione">
+        <h2>⚙️ Installazione e Avvio</h2>
 
         <h3>1. Clonazione Repository</h3>
 
