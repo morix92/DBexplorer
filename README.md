@@ -1,4 +1,4 @@
-# 🗄️ DB Schema Explorer
+# 🗄️ DB Explorer
 DB Explorer consente di connettersi a diversi database relazionali (SQLite, PostgreSQL, MySQL, SQL Server) e ottenere una rappresentazione completa della loro struttura attraverso report automatici, metriche aggregate, vincoli e diagrammi Entity Relationship (ER).
 
 L'applicazione integra un assistente AI basato su Google Gemini che permette di interrogare il database in linguaggio naturale e una console SQL dedicata per eseguire query in modalità diretta senza coinvolgere servizi esterni.
